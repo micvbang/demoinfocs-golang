@@ -6,17 +6,16 @@ import (
 	"time"
 
 	r3 "github.com/golang/geo/r3"
-	dp "github.com/markus-wa/godispatch"
-
 	bit "github.com/markus-wa/demoinfocs-golang/bitread"
 	common "github.com/markus-wa/demoinfocs-golang/common"
 	msg "github.com/markus-wa/demoinfocs-golang/msg"
 	st "github.com/markus-wa/demoinfocs-golang/sendtables"
+	dp "github.com/markus-wa/godispatch"
 )
 
 /*
 Parser can parse a CS:GO demo.
-Creating a Parser is done via NewParser().
+Creating a parser is done via NewParser().
 
 To start off you may use Parser.ParseHeader() to parse the demo header
 (this can be skipped and will be done automatically if necessary).
@@ -37,7 +36,25 @@ Example (without error handling):
 
 Prints out '{A/B} site went BOOM!' when a bomb explodes.
 */
-type Parser struct {
+type Parser interface {
+	ServerClasses() st.ServerClasses
+	Header() common.DemoHeader
+	GameState() *GameState
+	CurrentFrame() int
+	CurrentTime() time.Duration
+	Progress() float32
+	RegisterEventHandler(handler interface{}) dp.HandlerIdentifier
+	UnregisterEventHandler(identifier dp.HandlerIdentifier)
+	RegisterNetMessageHandler(handler interface{}) dp.HandlerIdentifier
+	UnregisterNetMessageHandler(identifier dp.HandlerIdentifier)
+	ParseHeader() (common.DemoHeader, error)
+	ParseToEnd() (err error)
+	Cancel()
+	ParseNextFrame() (b bool, err error)
+}
+
+// parser is our actual implementation of Parser
+type parser struct {
 	// Important fields
 
 	bitReader                    *bit.BitReader
@@ -86,30 +103,30 @@ func (bbi boundingBoxInformation) contains(point r3.Vector) bool {
 
 // ServerClasses returns the server-classes of this demo.
 // These are available after events.DataTablesParsed has been fired.
-func (p *Parser) ServerClasses() st.ServerClasses {
+func (p *parser) ServerClasses() st.ServerClasses {
 	return p.stParser.ServerClasses()
 }
 
 // Header returns the DemoHeader which contains the demo's metadata.
 // Only possible after ParserHeader() has been called.
-func (p *Parser) Header() common.DemoHeader {
+func (p *parser) Header() common.DemoHeader {
 	return *p.header
 }
 
 // GameState returns the current game-state.
 // It contains most of the relevant information about the game such as players, teams, scores, grenades etc.
-func (p *Parser) GameState() *GameState {
+func (p *parser) GameState() *GameState {
 	return &p.gameState
 }
 
 // CurrentFrame return the number of the current frame, aka. 'demo-tick' (Since demos often have a different tick-rate than the game).
 // Starts with frame 0, should go up to DemoHeader.PlaybackFrames but might not be the case (usually it's just close to it).
-func (p *Parser) CurrentFrame() int {
+func (p *parser) CurrentFrame() int {
 	return p.currentFrame
 }
 
 // CurrentTime returns the time elapsed since the start of the demo
-func (p *Parser) CurrentTime() time.Duration {
+func (p *parser) CurrentTime() time.Duration {
 	return time.Duration(p.currentFrame) * p.header.FrameTime()
 }
 
@@ -117,7 +134,7 @@ func (p *Parser) CurrentTime() time.Duration {
 // Where 0 means nothing has been parsed yet and 1 means the demo has been parsed to the end.
 //
 // Might not be 100% correct since it's just based on the reported tick count of the header.
-func (p *Parser) Progress() float32 {
+func (p *parser) Progress() float32 {
 	return float32(p.currentFrame) / float32(p.header.PlaybackFrames)
 }
 
@@ -137,14 +154,14 @@ Parameter handler has to be of type interface{} because lolnogenerics.
 
 Returns a identifier with which the handler can be removed via UnregisterEventHandler().
 */
-func (p *Parser) RegisterEventHandler(handler interface{}) dp.HandlerIdentifier {
+func (p *parser) RegisterEventHandler(handler interface{}) dp.HandlerIdentifier {
 	return p.eventDispatcher.RegisterHandler(handler)
 }
 
 // UnregisterEventHandler removes a game event handler via identifier.
 //
 // The identifier is returned at registration by RegisterEventHandler().
-func (p *Parser) UnregisterEventHandler(identifier dp.HandlerIdentifier) {
+func (p *parser) UnregisterEventHandler(identifier dp.HandlerIdentifier) {
 	p.eventDispatcher.UnregisterHandler(identifier)
 }
 
@@ -157,25 +174,26 @@ Returns a identifier with which the handler can be removed via UnregisterNetMess
 
 See also: RegisterEventHandler()
 */
-func (p *Parser) RegisterNetMessageHandler(handler interface{}) dp.HandlerIdentifier {
+
+func (p *parser) RegisterNetMessageHandler(handler interface{}) dp.HandlerIdentifier {
 	return p.msgDispatcher.RegisterHandler(handler)
 }
 
 // UnregisterNetMessageHandler removes a net-message handler via identifier.
 //
 // The identifier is returned at registration by RegisterNetMessageHandler().
-func (p *Parser) UnregisterNetMessageHandler(identifier dp.HandlerIdentifier) {
-	p.msgDispatcher.UnregisterHandler(identifier)
+func (p *parser) UnregisterNetMessageHandler(identifier dp.HandlerIdentifier) {
+	p.msgDispatcher.UnregisterHandler(dp.HandlerIdentifier(identifier))
 }
 
-func (p *Parser) error() (err error) {
+func (p *parser) error() (err error) {
 	p.errLock.Lock()
 	err = p.err
 	p.errLock.Unlock()
 	return
 }
 
-func (p *Parser) setError(err error) {
+func (p *parser) setError(err error) {
 	if err != nil {
 		p.errLock.Lock()
 		p.err = err
@@ -183,20 +201,20 @@ func (p *Parser) setError(err error) {
 	}
 }
 
-// NewParser creates a new Parser with the default configuration.
+// NewParser creates a new parser with the default configuration.
 // The demostream io.Reader (e.g. os.File or bytes.Reader) must provide demo data in the '.DEM' format.
 //
 // See also: NewCustomParser() & DefaultParserConfig
-func NewParser(demostream io.Reader) *Parser {
+func NewParser(demostream io.Reader) Parser {
 	return NewParserWithConfig(demostream, DefaultParserConfig)
 }
 
-// ParserConfig contains the configuration for creating a new Parser.
+// ParserConfig contains the configuration for creating a new parser.
 type ParserConfig struct {
 	// MsgQueueBufferSize defines the size of the internal net-message queue.
 	// For large demos, fast i/o and slow CPUs higher numbers are suggested and vice versa.
 	// The buffer size can easily be in the hundred-thousands to low millions for the best performance.
-	// A negative value will make the Parser automatically decide the buffer size during ParseHeader()
+	// A negative value will make the parser automatically decide the buffer size during ParseHeader()
 	// based on the number of ticks in the demo (nubmer of ticks = buffer size);
 	// this is the default behavior for DefaultParserConfig.
 	// Zero enforces sequential parsing.
@@ -221,19 +239,19 @@ type ParserConfig struct {
 //
 // See also: package fuzzy for existing emitters with fuzzy-logic that depends on the demo-type.
 type EventEmitter interface {
-	Register(parser *Parser, eventDispatcher func(event interface{}))
+	Register(parser Parser, eventDispatcher func(event interface{}))
 }
 
-// DefaultParserConfig is the default Parser configuration used by NewParser().
+// DefaultParserConfig is the default parser configuration used by NewParser().
 var DefaultParserConfig = ParserConfig{
 	MsgQueueBufferSize: -1,
 }
 
-// NewParserWithConfig returns a new Parser with a custom configuration.
+// NewParserWithConfig returns a new parser with a custom configuration.
 //
 // See also: NewParser() & ParserConfig
-func NewParserWithConfig(demostream io.Reader, config ParserConfig) *Parser {
-	var p Parser
+func NewParserWithConfig(demostream io.Reader, config ParserConfig) Parser {
+	var p parser
 
 	// Init parser
 	p.bitReader = bit.NewLargeBitReader(demostream)
@@ -268,7 +286,7 @@ func NewParserWithConfig(demostream io.Reader, config ParserConfig) *Parser {
 	return &p
 }
 
-func (p *Parser) initMsgQueue(buf int) {
+func (p *parser) initMsgQueue(buf int) {
 	p.msgQueue = make(chan interface{}, buf)
 	p.msgDispatcher.AddQueues(p.msgQueue)
 }

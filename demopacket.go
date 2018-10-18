@@ -11,7 +11,7 @@ import (
 
 // NetMessageCreator creates additional net-messages to be dispatched to net-message handlers.
 //
-// See also: ParserConfig.AdditionalNetMessageCreators & Parser.RegisterNetMessageHandler()
+// See also: ParserConfig.AdditionalNetMessageCreators & parser.RegisterNetMessageHandler()
 type NetMessageCreator func() proto.Message
 
 func NewNetMessageFunc(t interface{}) (int, func() proto.Message) {
@@ -67,7 +67,7 @@ var byteSlicePool = sync.Pool{
 	},
 }
 
-func (p *Parser) parsePacket() {
+func (p *parser) parsePacket() {
 	// Booooring
 	// 152 bytes CommandInfo, 4 bytes SeqNrIn, 4 bytes SeqNrOut
 	// See at the bottom what the CommandInfo would contain if you are interested.
