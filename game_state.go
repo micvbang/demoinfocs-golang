@@ -5,6 +5,19 @@ import (
 	st "github.com/markus-wa/demoinfocs-golang/sendtables"
 )
 
+func NewGameStateMockPlayersByUserID(playersByUserID map[int]*common.Player) *GameState {
+	return &GameState{
+		playersByUserID: playersByUserID,
+	}
+}
+
+func NewGameStateMockTeamStates(tState, ctState common.TeamState) *GameState {
+	return &GameState{
+		tState:  tState,
+		ctState: ctState,
+	}
+}
+
 // GameState contains all game-state relevant information.
 type GameState struct {
 	ingameTick         int
