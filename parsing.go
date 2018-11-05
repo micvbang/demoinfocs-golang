@@ -13,8 +13,11 @@ import (
 const maxOsPath = 260
 
 const (
-	playerWeaponPrefix    = "m_hMyWeapons."
-	playerWeaponPrePrefix = "bcc_nonlocaldata."
+	playerWeaponPrefix          = "m_hMyWeapons."
+	playerWeaponPrePrefix       = "bcc_nonlocaldata."
+	gameRulesPrefix             = "cs_gamerules_data"
+	gameRulesPlayersAlivePrefix = "m_iMatchStats_PlayersAlive"
+	gameRulesRoundResultsPrefix = "m_iMatchStats_RoundResults"
 )
 
 // Parsing errors

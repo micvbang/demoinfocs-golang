@@ -2,6 +2,7 @@ package demoinfocs
 
 import (
 	"fmt"
+	"log"
 	"strings"
 
 	r3 "github.com/golang/geo/r3"
@@ -65,6 +66,7 @@ func (p *parser) bindEntities() {
 	p.bindPlayers()
 	p.bindWeapons()
 	p.bindBomb()
+	p.bindGameRules()
 }
 
 func (p *parser) bindBomb() {
@@ -464,4 +466,91 @@ func (p *parser) infernoExpired(inf *common.Inferno) {
 	})
 
 	delete(p.gameState.infernos, inf.EntityID)
+}
+
+func (p *parser) bindGameRules() {
+	sc := p.printServerClassNameEntityCreated("CCSGameRulesProxy")
+	sc.OnEntityCreated(func(entity *st.Entity) {
+		// bindGameRulesPlayersAlive(entity)
+		// bindGameRulesRoundResults(entity)
+
+		bindGameRuleInt(entity, "m_gamePhase")
+		bindGameRuleInt(entity, "m_bFreezePeriod")
+		bindGameRuleInt(entity, "m_iRoundTime")
+		bindGameRuleInt(entity, "m_totalRoundsPlayed")
+		bindGameRuleInt(entity, "m_nOvertimePlaying")
+		bindGameRuleInt(entity, "m_bGameRestart")
+		bindGameRuleInt(entity, "m_iRoundWinStatus")
+		bindGameRuleInt(entity, "m_eRoundWinReason")
+		bindGameRuleInt(entity, "m_MatchDevice")
+		bindGameRuleInt(entity, "m_bHasMatchStarted")
+		bindGameRuleInt(entity, "m_numBestOfMaps")
+		bindGameRuleFloat(entity, "m_fWarmupPeriodEnd")
+		bindGameRuleFloat(entity, "m_timeUntilNextPhaseStarts")
+
+		bindGameRuleInt(entity, "m_bTerroristTimeOutActive")
+		bindGameRuleInt(entity, "m_bCTTimeOutActive")
+		// bindGameRuleFloat(entity, "m_flTerroristTimeOutRemaining")
+		// bindGameRuleFloat(entity, "m_flCTTimeOutRemaining")
+		bindGameRuleInt(entity, "m_nTerroristTimeOuts")
+		bindGameRuleInt(entity, "m_nCTTimeOuts")
+	})
+}
+
+func bindGameRuleInt(entity *st.Entity, name string) {
+	entity.FindProperty(fmt.Sprintf("%s.%s", gameRulesPrefix, name)).OnUpdate(func(e st.PropertyValue) {
+		log.Printf("%s: %+v\n", name, e.IntVal)
+	})
+}
+
+func bindGameRuleFloat(entity *st.Entity, name string) {
+	entity.FindProperty(fmt.Sprintf("%s.%s", gameRulesPrefix, name)).OnUpdate(func(e st.PropertyValue) {
+		log.Printf("%s: %+v\n", name, e.FloatVal)
+	})
+}
+
+func bindGameRulesRoundResults(entity *st.Entity) {
+	for i := 0; i < 30; i++ {
+		propName := fmt.Sprintf("%s.%s.%03d", gameRulesPrefix, gameRulesRoundResultsPrefix, i)
+		log.Printf("%s\n", propName)
+		prop := entity.FindProperty(propName)
+		prop.OnUpdate(func(e st.PropertyValue) {
+			log.Printf("%s: %d", propName, e.IntVal)
+		})
+	}
+
+}
+
+func bindGameRulesPlayersAlive(entity *st.Entity) {
+	for _, team := range []string{"T", "CT"} {
+		for i := 0; i < 30; i++ {
+			propName := fmt.Sprintf("%s.%s_%s.%03d", gameRulesPrefix, gameRulesPlayersAlivePrefix, team, i)
+			log.Printf("%s\n", propName)
+			prop := entity.FindProperty(propName)
+			prop.OnUpdate(func(e st.PropertyValue) {
+				log.Printf("%s: %d", propName, e.IntVal)
+			})
+		}
+	}
+}
+
+func (p *parser) printServerClassNameEntityCreated(name string) *st.ServerClass {
+	sc := p.stParser.ServerClasses().FindByName(name)
+	if sc == nil {
+		return nil
+	}
+
+	sc.OnEntityCreated(func(entity *st.Entity) {
+		log.Printf("%s\n", name)
+		log.Printf("DT name: %+v\n", sc.DataTableName())
+		log.Printf("Base classes:\n")
+		for _, bc := range sc.BaseClasses() {
+			log.Printf("  %s\n", bc.Name())
+		}
+		log.Printf("Properties:\n")
+		for _, prop := range sc.PropertyEntries() {
+			log.Printf("  %s\n", prop)
+		}
+	})
+	return sc
 }
