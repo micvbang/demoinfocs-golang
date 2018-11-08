@@ -4,5 +4,5 @@
 	branch = master
 [submodule "vendor"]
 	path = vendor
-	url = https://github.com/markus-wa/demoinfocs-golang-vendor.git
+	url = https://github.com/micvbang/demoinfocs-golang-vendor.git
 	branch = master

@@ -1,9 +1,9 @@
 package fuzzy
 
 import (
-	dem "github.com/markus-wa/demoinfocs-golang"
-	common "github.com/markus-wa/demoinfocs-golang/common"
-	events "github.com/markus-wa/demoinfocs-golang/events"
+	dem "github.com/micvbang/demoinfocs-golang"
+	common "github.com/micvbang/demoinfocs-golang/common"
+	events "github.com/micvbang/demoinfocs-golang/events"
 )
 
 // TeamSwitchEvent signals that the teams have switched.
@@ -16,7 +16,7 @@ type TeamSwitchEvent struct{}
 //
 // This is a beta feature and may be changed or replaced without notice.
 //
-// See also: github.com/markus-wa/demoinfocs-golang/ParserConfig.AdditionalEventEmitters
+// See also: github.com/micvbang/demoinfocs-golang/ParserConfig.AdditionalEventEmitters
 type ValveMatchmakingTeamSwitchEmitter struct {
 	parser              dem.Parser
 	dispatch            func(interface{})

@@ -7,8 +7,8 @@ package demoinfocs
 import (
 	"fmt"
 
-	msg "github.com/markus-wa/demoinfocs-golang/msg"
-	st "github.com/markus-wa/demoinfocs-golang/sendtables"
+	msg "github.com/micvbang/demoinfocs-golang/msg"
+	st "github.com/micvbang/demoinfocs-golang/sendtables"
 )
 
 const isDebug = true
@@ -18,7 +18,7 @@ const (
 	no  = "NO"
 )
 
-// Can be overridden via -ldflags '-X github.com/markus-wa/demoinfocs-golang.debugIngameTicks=YES'
+// Can be overridden via -ldflags '-X github.com/micvbang/demoinfocs-golang.debugIngameTicks=YES'
 // Oh and btw we cant use bools for this, Go says 'cannot use -X with non-string symbol'
 var debugGameEvents = yes
 var debugUnhandledMessages = yes

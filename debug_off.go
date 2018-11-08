@@ -5,8 +5,8 @@
 package demoinfocs
 
 import (
-	msg "github.com/markus-wa/demoinfocs-golang/msg"
-	st "github.com/markus-wa/demoinfocs-golang/sendtables"
+	msg "github.com/micvbang/demoinfocs-golang/msg"
+	st "github.com/micvbang/demoinfocs-golang/sendtables"
 )
 
 const isDebug = false

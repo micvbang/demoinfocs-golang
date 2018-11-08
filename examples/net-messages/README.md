@@ -36,8 +36,8 @@ Example: `ConVar` messages
 
 ```go
 import (
-	dem "github.com/markus-wa/demoinfocs-golang"
-	msg "github.com/markus-wa/demoinfocs-golang/msg"
+	dem "github.com/micvbang/demoinfocs-golang"
+	msg "github.com/micvbang/demoinfocs-golang/msg"
 )
 
 cfg := dem.DefaultParserConfig

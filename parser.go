@@ -6,10 +6,10 @@ import (
 	"time"
 
 	r3 "github.com/golang/geo/r3"
-	bit "github.com/markus-wa/demoinfocs-golang/bitread"
-	common "github.com/markus-wa/demoinfocs-golang/common"
-	msg "github.com/markus-wa/demoinfocs-golang/msg"
-	st "github.com/markus-wa/demoinfocs-golang/sendtables"
+	bit "github.com/micvbang/demoinfocs-golang/bitread"
+	common "github.com/micvbang/demoinfocs-golang/common"
+	msg "github.com/micvbang/demoinfocs-golang/msg"
+	st "github.com/micvbang/demoinfocs-golang/sendtables"
 	dp "github.com/markus-wa/godispatch"
 )
 

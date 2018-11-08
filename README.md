@@ -2,10 +2,10 @@
 
 Is a Go library for super fast parsing and analysing of Counter Strike: Global Offensive (CSGO) demos (aka replays). It is based on [Valve's demoinfogo](https://github.com/ValveSoftware/csgo-demoinfo) and [SatsHelix's demoinfo](https://github.com/StatsHelix/demoinfo).
 
-[![GoDoc](https://godoc.org/github.com/markus-wa/demoinfocs-golang?status.svg)](https://godoc.org/github.com/markus-wa/demoinfocs-golang)
+[![GoDoc](https://godoc.org/github.com/micvbang/demoinfocs-golang?status.svg)](https://godoc.org/github.com/micvbang/demoinfocs-golang)
 [![Build Status](https://travis-ci.org/markus-wa/demoinfocs-golang.svg?branch=master)](https://travis-ci.org/markus-wa/demoinfocs-golang)
 [![codecov](https://codecov.io/gh/markus-wa/demoinfocs-golang/branch/master/graph/badge.svg)](https://codecov.io/gh/markus-wa/demoinfocs-golang)
-[![Go Report](https://goreportcard.com/badge/github.com/markus-wa/demoinfocs-golang)](https://goreportcard.com/report/github.com/markus-wa/demoinfocs-golang)
+[![Go Report](https://goreportcard.com/badge/github.com/micvbang/demoinfocs-golang)](https://goreportcard.com/report/github.com/micvbang/demoinfocs-golang)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE.md)
 
 ## Discussions / Chat
@@ -16,13 +16,13 @@ You can use gitter to ask questions and discuss ideas about this project.
 
 ## Go Get
 
-	go get -u github.com/markus-wa/demoinfocs-golang
+	go get -u github.com/micvbang/demoinfocs-golang
 
 ## Example
 
 This is a simple example on how to use the library. It collects all positions where weapons were fired from (using `events.WeaponFire`) and creates a heatmap using [go-heatmap](https://github.com/dustin/go-heatmap).
 
-Check out the [examples](examples) folder for more examples and the [godoc of the `events` package](https://godoc.org/github.com/markus-wa/demoinfocs-golang/events) for some information about the other available events and their purpose.
+Check out the [examples](examples) folder for more examples and the [godoc of the `events` package](https://godoc.org/github.com/micvbang/demoinfocs-golang/events) for some information about the other available events and their purpose.
 
 ```go
 package main
@@ -38,9 +38,9 @@ import (
 	heatmap "github.com/dustin/go-heatmap"
 	schemes "github.com/dustin/go-heatmap/schemes"
 
-	dem "github.com/markus-wa/demoinfocs-golang"
-	events "github.com/markus-wa/demoinfocs-golang/events"
-	metadata "github.com/markus-wa/demoinfocs-golang/metadata"
+	dem "github.com/micvbang/demoinfocs-golang"
+	events "github.com/micvbang/demoinfocs-golang/events"
+	metadata "github.com/micvbang/demoinfocs-golang/metadata"
 )
 
 // Run like this: go run heatmap.go > out.jpg
@@ -134,12 +134,12 @@ Running the above code (`go run heatmap.go > heatmap.png`) will create a JPEG of
 
 ## Features
 
-* Game events (kills, shots, round starts/ends, footsteps etc.) - [docs](https://godoc.org/github.com/markus-wa/demoinfocs-golang/events) / [example](https://github.com/markus-wa/demoinfocs-golang/tree/master/examples/print-events)
-* Tracking of game-state (players, teams, grenades etc.) - [docs](https://godoc.org/github.com/markus-wa/demoinfocs-golang#GameState)
-* Grenade projectiles / trajectories - [docs](https://godoc.org/github.com/markus-wa/demoinfocs-golang#GameState.GrenadeProjectiles) / [example](https://github.com/markus-wa/demoinfocs-golang/tree/master/examples/nade-trajectories)
-* Access to entities, server-classes & data-tables - [docs](https://godoc.org/github.com/markus-wa/demoinfocs-golang/sendtables#ServerClasses) / [example](https://github.com/markus-wa/demoinfocs-golang/tree/master/examples/entities)
-* Access to all net-messages - [docs](https://godoc.org/github.com/markus-wa/demoinfocs-golang#NetMessageCreator) / [example](https://github.com/markus-wa/demoinfocs-golang/tree/master/examples/net-messages)
-* Chat & console messages <sup id="achat1">1</sup> - [docs](https://godoc.org/github.com/markus-wa/demoinfocs-golang/events#ChatMessage) / [example](https://github.com/markus-wa/demoinfocs-golang/tree/master/examples/print-events)
+* Game events (kills, shots, round starts/ends, footsteps etc.) - [docs](https://godoc.org/github.com/micvbang/demoinfocs-golang/events) / [example](https://github.com/micvbang/demoinfocs-golang/tree/master/examples/print-events)
+* Tracking of game-state (players, teams, grenades etc.) - [docs](https://godoc.org/github.com/micvbang/demoinfocs-golang#GameState)
+* Grenade projectiles / trajectories - [docs](https://godoc.org/github.com/micvbang/demoinfocs-golang#GameState.GrenadeProjectiles) / [example](https://github.com/micvbang/demoinfocs-golang/tree/master/examples/nade-trajectories)
+* Access to entities, server-classes & data-tables - [docs](https://godoc.org/github.com/micvbang/demoinfocs-golang/sendtables#ServerClasses) / [example](https://github.com/micvbang/demoinfocs-golang/tree/master/examples/entities)
+* Access to all net-messages - [docs](https://godoc.org/github.com/micvbang/demoinfocs-golang#NetMessageCreator) / [example](https://github.com/micvbang/demoinfocs-golang/tree/master/examples/net-messages)
+* Chat & console messages <sup id="achat1">1</sup> - [docs](https://godoc.org/github.com/micvbang/demoinfocs-golang/events#ChatMessage) / [example](https://github.com/micvbang/demoinfocs-golang/tree/master/examples/print-events)
 * [Easy debugging via build-flags](#debugging)
 * Built with performance & concurrency in mind
 
@@ -165,7 +165,7 @@ Here are some benchmark results from a system with a Intel i7 2600k CPU and SSD 
 $ go test -run _NONE_ -bench . -benchtime 30s -benchmem -concurrentdemos 8
 goos: windows
 goarch: amd64
-pkg: github.com/markus-wa/demoinfocs-golang
+pkg: github.com/micvbang/demoinfocs-golang
 BenchmarkDemoInfoCs-8                 30        1397398190 ns/op        162254528 B/op    839779 allocs/op
 BenchmarkInMemory-8                   30        1384877250 ns/op        162109924 B/op    839628 allocs/op
 BenchmarkConcurrent-8                 20        2902574295 ns/op        1297042534 B/op  6717163 allocs/op
@@ -173,12 +173,12 @@ BenchmarkConcurrent-8                 20        2902574295 ns/op        12970425
         demoinfocs_test.go:425: Running concurrency benchmark with 8 demos
         demoinfocs_test.go:425: Running concurrency benchmark with 8 demos
 PASS
-ok      github.com/markus-wa/demoinfocs-golang  147.800s
+ok      github.com/micvbang/demoinfocs-golang  147.800s
 ```
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/markus-wa/demoinfocs-golang/tags).
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/micvbang/demoinfocs-golang/tags).
 There is one caveat however: Beta features - which are marked as such via comments and in release notes - may change in minor releases.
 
 It's recommended to use some kind of dependency management system such as [dep](https://github.com/golang/dep) to ensure reproducible builds.
@@ -203,7 +203,7 @@ Here's a cool [gist of a pre-commit hook](https://gist.github.com/micvbang/4c8cb
 You can use the build tag `debugdemoinfocs` (i.e. `go test -tags debugdemoinfocs -v`) to print out debugging information - such as game events or unhandled demo-messages - during the parsing process.<br>
 Side-note: The tag isn't called `debug` to avoid naming conflicts with other libs (and underscores in tags don't work, apparently).
 
-To change the default debugging behavior Go's `ldflags` paramter can be used. Example for additionally printing out all server-classes with their properties: `-ldflags '-X github.com/markus-wa/demoinfocs-golang.debugServerClasses=YES'`
+To change the default debugging behavior Go's `ldflags` paramter can be used. Example for additionally printing out all server-classes with their properties: `-ldflags '-X github.com/micvbang/demoinfocs-golang.debugServerClasses=YES'`
 
 Check out `debug_on.go` for any other settings that can be changed.
 

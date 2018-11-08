@@ -2,7 +2,7 @@ package common
 
 import (
 	r3 "github.com/golang/geo/r3"
-	st "github.com/markus-wa/demoinfocs-golang/sendtables"
+	st "github.com/micvbang/demoinfocs-golang/sendtables"
 )
 
 // Player contains mostly game-relevant player information.

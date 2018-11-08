@@ -5,8 +5,8 @@ import (
 	"sync"
 
 	proto "github.com/gogo/protobuf/proto"
-	events "github.com/markus-wa/demoinfocs-golang/events"
-	msg "github.com/markus-wa/demoinfocs-golang/msg"
+	events "github.com/micvbang/demoinfocs-golang/events"
+	msg "github.com/micvbang/demoinfocs-golang/msg"
 )
 
 // NetMessageCreator creates additional net-messages to be dispatched to net-message handlers.

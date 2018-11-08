@@ -14,11 +14,11 @@ import (
 	"time"
 
 	proto "github.com/gogo/protobuf/proto"
-	dem "github.com/markus-wa/demoinfocs-golang"
-	common "github.com/markus-wa/demoinfocs-golang/common"
-	events "github.com/markus-wa/demoinfocs-golang/events"
-	fuzzy "github.com/markus-wa/demoinfocs-golang/fuzzy"
-	msg "github.com/markus-wa/demoinfocs-golang/msg"
+	dem "github.com/micvbang/demoinfocs-golang"
+	common "github.com/micvbang/demoinfocs-golang/common"
+	events "github.com/micvbang/demoinfocs-golang/events"
+	fuzzy "github.com/micvbang/demoinfocs-golang/fuzzy"
+	msg "github.com/micvbang/demoinfocs-golang/msg"
 )
 
 const csDemosPath = "cs-demos"

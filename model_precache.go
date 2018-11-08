@@ -3,7 +3,7 @@ package demoinfocs
 import (
 	"strings"
 
-	common "github.com/markus-wa/demoinfocs-golang/common"
+	common "github.com/micvbang/demoinfocs-golang/common"
 )
 
 var modelPrecacheNameToEq = []struct {

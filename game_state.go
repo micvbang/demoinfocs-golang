@@ -1,8 +1,8 @@
 package demoinfocs
 
 import (
-	"github.com/markus-wa/demoinfocs-golang/common"
-	st "github.com/markus-wa/demoinfocs-golang/sendtables"
+	"github.com/micvbang/demoinfocs-golang/common"
+	st "github.com/micvbang/demoinfocs-golang/sendtables"
 )
 
 func NewGameStateMockPlayersByUserID(playersByUserID map[int]*common.Player) *GameState {

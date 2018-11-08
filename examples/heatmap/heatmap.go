@@ -10,10 +10,10 @@ import (
 	heatmap "github.com/dustin/go-heatmap"
 	schemes "github.com/dustin/go-heatmap/schemes"
 
-	dem "github.com/markus-wa/demoinfocs-golang"
-	events "github.com/markus-wa/demoinfocs-golang/events"
-	ex "github.com/markus-wa/demoinfocs-golang/examples"
-	metadata "github.com/markus-wa/demoinfocs-golang/metadata"
+	dem "github.com/micvbang/demoinfocs-golang"
+	events "github.com/micvbang/demoinfocs-golang/events"
+	ex "github.com/micvbang/demoinfocs-golang/examples"
+	metadata "github.com/micvbang/demoinfocs-golang/metadata"
 )
 
 // Run like this: go run heatmap.go -demo /path/to/demo.dem > out.jpg

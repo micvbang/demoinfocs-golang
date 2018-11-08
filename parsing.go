@@ -6,8 +6,8 @@ import (
 	"io"
 	"time"
 
-	common "github.com/markus-wa/demoinfocs-golang/common"
-	events "github.com/markus-wa/demoinfocs-golang/events"
+	common "github.com/micvbang/demoinfocs-golang/common"
+	events "github.com/micvbang/demoinfocs-golang/events"
 )
 
 const maxOsPath = 260

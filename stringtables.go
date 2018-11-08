@@ -6,9 +6,9 @@ import (
 	"io"
 	"strconv"
 
-	bit "github.com/markus-wa/demoinfocs-golang/bitread"
-	"github.com/markus-wa/demoinfocs-golang/events"
-	msg "github.com/markus-wa/demoinfocs-golang/msg"
+	bit "github.com/micvbang/demoinfocs-golang/bitread"
+	"github.com/micvbang/demoinfocs-golang/events"
+	msg "github.com/micvbang/demoinfocs-golang/msg"
 )
 
 const (

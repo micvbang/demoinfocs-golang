@@ -3,8 +3,8 @@ package demoinfocs
 import (
 	"bytes"
 
-	bit "github.com/markus-wa/demoinfocs-golang/bitread"
-	msg "github.com/markus-wa/demoinfocs-golang/msg"
+	bit "github.com/micvbang/demoinfocs-golang/bitread"
+	msg "github.com/micvbang/demoinfocs-golang/msg"
 )
 
 const entitySentinel = 9999
