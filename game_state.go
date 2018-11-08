@@ -31,6 +31,7 @@ type GameState struct {
 	bomb               common.Bomb
 	totalRoundsPlayed  int
 	gamePhase          common.GamePhase
+	isWarmupPeriod     bool
 }
 
 type ingameTickNumber int
@@ -96,6 +97,11 @@ func (gs GameState) Bomb() *common.Bomb {
 
 func (gs GameState) TotalRoundsPlayed() int {
 	return gs.totalRoundsPlayed
+}
+
+// IsWarmupPeriod returns whether the game is currently in warmup period.
+func (gs GameState) IsWarmupPeriod() bool {
+	return gs.isWarmupPeriod
 }
 
 func newGameState() GameState {
